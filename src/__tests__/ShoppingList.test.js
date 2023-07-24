@@ -4,11 +4,13 @@ import {
   render,
   screen,
   fireEvent,
+  waitFor,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { resetData } from "../mocks/handlers";
 import { server } from "../mocks/server";
 import ShoppingList from "../components/ShoppingList";
+import { act } from "react-dom/test-utils";
 
 beforeAll(() => server.listen());
 afterEach(() => {
@@ -43,10 +45,12 @@ test("adds a new item to the list when the ItemForm is submitted", async () => {
     target: { value: "Dessert" },
   });
 
-  fireEvent.submit(screen.queryByText(/Add to List/));
-
-  const iceCream = await screen.findByText(/Ice Cream/);
-  expect(iceCream).toBeInTheDocument();
+  await act(async () => {
+    fireEvent.click(screen.getByText("Add to List"));
+    await waitFor(() => {
+      expect(screen.queryByText("Ice Cream")).toBeInTheDocument();
+    });
+  });
 
   const desserts = await screen.findAllByText(/Dessert/);
   expect(desserts.length).toBe(dessertCount + 1);
