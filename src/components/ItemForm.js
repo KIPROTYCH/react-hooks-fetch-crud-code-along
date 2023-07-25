@@ -1,11 +1,25 @@
 import React, { useState } from "react";
 
-function ItemForm() {
+function ItemForm({ onAddItem }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Produce");
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    // Create a new item object using the input values
+    const newItem = {
+      name,
+      category,
+    };
+    // Call the onAddItem prop to add the new item to the list
+    onAddItem(newItem);
+    // Clear the form fields after adding the item
+    setName("");
+    setCategory("Produce");
+  }
+
   return (
-    <form className="NewItem">
+    <form className="NewItem" onSubmit={handleSubmit}>
       <label>
         Name:
         <input
