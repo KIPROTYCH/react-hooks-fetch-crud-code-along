@@ -98,7 +98,6 @@ test("removes an item from the list when the delete button is clicked", async ()
 
   await waitForElementToBeRemoved(() => screen.queryByText(/Yogurt/));
 
-  // Rerender the component to ensure the item was persisted
   rerender(<ShoppingList />);
 
   const rerenderedDeleteButtons = await screen.findAllByText(/Delete/);
